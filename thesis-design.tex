@@ -53,7 +53,8 @@
 \acmYear{2022}
 \acmDOI{XXXXXXX.XXXXXXX}
 
-
+%% Add images folder as source for graphics
+\graphicspath{ {images/} }
 
 %% These commands are for a PROCEEDINGS abstract or paper.
 \acmConference[Conference acronym 'XX]{Make sure to enter the correct
@@ -128,8 +129,12 @@
 %% The abstract is a short summary of the work to be presented in the
 %% article.
 \begin{abstract}
-Find the most recent version of my design through GitHub: 
-DISCLAIMER: I am using this space to inform you that I have only secured a project 3 weeks ago and only last week did we settle on the subject. Hence my paper being in such a raw shape. It speaks for itself which sections are more fleshed out and which are mere summations of points I wish to talk about. I would greatly appreciate it if you can take this into account while reviewing it.
+
+DISCLAIMER: 
+
+Find the most recent version of my design through GitHub: \url{https://github.com/SytseGroenwold/masters-thesis}. I would immensely appreciate it if you can take the lastest version from there when providing feedback; I plan to finalise it by Sunday 27th of February, but I understand if you cannot wait until then. \\
+
+I have only secured this project 3 weeks ago and only last week the supervisor and I settled on the subject. Hence my paper being in such a raw shape. It speaks for itself which sections are more fleshed out and which are mere summations of points I wish to talk about. I would greatly appreciate it if you can take this into account while reviewing it.
 \end{abstract}
 
 %%
@@ -178,17 +183,46 @@ Lastly, this project's supervisor is currently giving a course on DevOps and Clo
 The model for the data sets gathered from Jira have the following features. In a later stage of the project, features which are not used can be left out.
 
 \begin{table}[h]
+\caption{Overview of features in the Jira user story data sets.}
 \begin{tabular}{|lll|}
 \hline
-\multicolumn{1}{|c}{\#} & \multicolumn{1}{c}{Feature} & \multicolumn{1}{c|}{Description}  \\ \hline
-1                       & 21/02 - 25/02               & Long line of text just to see how \\
-2                       & 28/02 - 04/03               & B                                 \\
-3                       & 07/03 - 11/03               & C                                 \\
-4                       & 14/03 - 18/03               & D                                 \\
-5                       & 21/03 - 25/03               & E                                 \\ \hline
+\multicolumn{1}{|c}{\#} & \multicolumn{1}{c}{Feature} & \multicolumn{1}{c|}{Description}                                                                                     \\ \hline
+1                       & Issue id                    & \begin{tabular}[c]{@{}l@{}}Issue is Jira's name for a\\ user story\end{tabular}                                      \\
+2                       & Summary                     &                                                                                                                      \\
+3                       & Description                 &                                                                                                                      \\
+4                       & Status                      &                                                                                                                      \\
+5                       & Resolution                  &                                                                                                                      \\
+6                       & Project key                 &                                                                                                                      \\
+7                       & Priority                    &                                                                                                                      \\
+8                       & Rank                        &                                                                                                                      \\
+9                       & Impact                      &                                                                                                                      \\
+10                      & Votes                       &                                                                                                                      \\
+11                      & Story point estimate        &                                                                                                                      \\
+12                      & Change reason               &                                                                                                                      \\
+13                      & Change risk                 &                                                                                                                      \\
+14                      & Change type                 &                                                                                                                      \\
+15                      & Request type                &                                                                                                                      \\
+16                      & Epic name                   &                                                                                                                      \\
+17                      & Environment                 & sbx, dev, tst, acc, prd                                                                                              \\
+18                      & Security level              &                                                                                                                      \\
+19                      & Assignee ID                 &                                                                                                                      \\
+20                      & Reporter ID                 &                                                                                                                      \\
+21                      & Creator ID                  &                                                                                                                      \\
+22                      & Watchers ID                 &                                                                                                                      \\
+23                      & Created                     &                                                                                                                      \\
+24                      & Updated                     &                                                                                                                      \\
+25                      & Last Viewed                 &                                                                                                                      \\
+26                      & Resolved                    &                                                                                                                      \\
+27                      & Due date                    &                                                                                                                      \\
+28                      & Actual end                  &                                                                                                                      \\
+29                      & Actual start                &                                                                                                                      \\
+30                      & Original estimate           &                                                                                                                      \\
+31                      & Remaining estimate          &                                                                                                                      \\
+32                      & Time Spent                  &                                                                                                                      \\
+33                      & Work Ratio                  &                                                                                                                      \\
+34                      & Sprint\#                    & \begin{tabular}[c]{@{}l@{}}A number of fields equal to \\ the number of sprints it has \\ been part of.\end{tabular} \\ \hline
 \end{tabular}
 \end{table}
-
 
 \section{Related work} 
 Some introductory piece of text to ensure that the next paragraphs nicely indent the same amount of space. \\
