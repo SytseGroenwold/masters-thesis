@@ -1,26 +1,3 @@
-%%
-%% This is file `sample-lualatex.tex',
-%% generated with the docstrip utility.
-%%
-%% The original source files were:
-%%
-%% samples.dtx  (with options: `sigconf')
-%% 
-%% IMPORTANT NOTICE:
-%% 
-%% For the copyright see the source file.
-%% 
-%% Any modified versions of this file must be renamed
-%% with new filenames distinct from sample-lualatex.tex.
-%% 
-%% For distribution of the original source see the terms
-%% for copying and modification in the file samples.dtx.
-%% 
-%% This generated file may be distributed as long as the
-%% original source files, as listed above, are part of the
-%% same distribution. (The sources need not necessarily be
-%% in the same archive or directory.)
-%%
 %% The first command in your LaTeX source must be the \documentclass command.
 \documentclass[sigconf]{acmart}
 %% NOTE that a single column version is required for 
@@ -48,53 +25,42 @@
 %% values in them; it is your responsibility as an author to replace
 %% the commands and values with those provided to you when you
 %% complete the rights form.
-\setcopyright{acmcopyright}
-\copyrightyear{2022}
-\acmYear{2022}
-\acmDOI{XXXXXXX.XXXXXXX}
-
-%% Add images folder as source for graphics
-\graphicspath{ {images/} }
+% \setcopyright{acmcopyright}
+% \copyrightyear{2022}
+% \acmYear{2022}
+% \acmDOI{XXXXXXX.XXXXXXX}
 
 %% These commands are for a PROCEEDINGS abstract or paper.
-\acmConference[Conference acronym 'XX]{Make sure to enter the correct
-  conference title from your rights confirmation emai}{June 03--05,
-  2018}{Woodstock, NY}
+% \acmConference[Conference acronym 'XX]{Make sure to enter the correct
+%   conference title from your rights confirmation emai}{June 03--05,
+%   2018}{Woodstock, NY}
 %
 %  Uncomment \acmBooktitle if th title of the proceedings is different
 %  from ``Proceedings of ...''!
 %
 %\acmBooktitle{Woodstock '18: ACM Symposium on Neural Gaze Detection,
 %  June 03--05, 2018, Woodstock, NY} 
-\acmPrice{15.00}
-\acmISBN{978-1-4503-XXXX-X/18/06}
+% \acmPrice{15.00}
+% \acmISBN{978-1-4503-XXXX-X/18/06}
 
-
-%%
 %% Submission ID.
 %% Use this when submitting an article to a sponsored event. You'll
 %% receive a unique submission ID from the organizers
 %% of the event, and this ID should be used as the parameter to this command.
 %%\acmSubmissionID{123-A56-BU3}
-
-%%
 %% The majority of ACM publications use numbered citations and
 %% references.  The command \citestyle{authoryear} switches to the
 %% "author year" style.
-%%
-%% If you are preparing content for an event
-%% sponsored by ACM SIGGRAPH, you must use the "author year" style of
-%% citations and references.
-%% Uncommenting
-%% the next command will enable that style.
-%%\citestyle{acmauthoryear}
 
-%%
+%% Add images folder as source for graphics
+\graphicspath{ {images/} }
+
 %% end of the preamble, start of the body of the document source.
 
+%% Begin document
 \begin{document}
 
-%%
+
 %% The "title" command has an optional parameter,
 %% allowing the author to define a "short title" to be used in page headers.
 \title{Master Thesis Proposal: Risk detection and risk control through sprint backlog analysis}
@@ -148,6 +114,14 @@ I have only secured this project 3 weeks ago and only last week the supervisor a
 \maketitle
 
 \section{Introduction}
+Stuff to incorporate
+
+iteration: in Scrum, an iteration is a short amount of time (usually 2-4 weeks) in which a team works on a predetermined amount of user stories to create an increment.
+
+increment: an increment is a working milestone or release of a software product.
+
+time-boxed: fixed duration
+
 In software development, there are several risk events that can decrease product quality, delay delivery or even cause the project to fail[2]. 
 Tangible examples of these events are budget overruns and losing personnel, while more subtle ones include a lack of clearly defining work to be done or team members being unaligned. 
 (Early) detection (i.e. risk assessment) of such risks and controlling them effectively (i.e. risk control) is crucial for the success of a project[3].
@@ -182,46 +156,45 @@ Lastly, this project's supervisor is currently giving a course on DevOps and Clo
 
 The model for the data sets gathered from Jira have the following features. In a later stage of the project, features which are not used can be left out.
 
-\begin{table}[h]
-\caption{Overview of features in the Jira user story data sets.}
-\begin{tabular}{|lll|}
-\hline
-\multicolumn{1}{|c}{\#} & \multicolumn{1}{c}{Feature} & \multicolumn{1}{c|}{Description}                                                                                     \\ \hline
-1                       & Issue id                    & \begin{tabular}[c]{@{}l@{}}Issue is Jira's name for a\\ user story\end{tabular}                                      \\
-2                       & Summary                     &                                                                                                                      \\
-3                       & Description                 &                                                                                                                      \\
-4                       & Status                      &                                                                                                                      \\
-5                       & Resolution                  &                                                                                                                      \\
-6                       & Project key                 &                                                                                                                      \\
-7                       & Priority                    &                                                                                                                      \\
-8                       & Rank                        &                                                                                                                      \\
-9                       & Impact                      &                                                                                                                      \\
-10                      & Votes                       &                                                                                                                      \\
-11                      & Story point estimate        &                                                                                                                      \\
-12                      & Change reason               &                                                                                                                      \\
-13                      & Change risk                 &                                                                                                                      \\
-14                      & Change type                 &                                                                                                                      \\
-15                      & Request type                &                                                                                                                      \\
-16                      & Epic name                   &                                                                                                                      \\
-17                      & Environment                 & sbx, dev, tst, acc, prd                                                                                              \\
-18                      & Security level              &                                                                                                                      \\
-19                      & Assignee ID                 &                                                                                                                      \\
-20                      & Reporter ID                 &                                                                                                                      \\
-21                      & Creator ID                  &                                                                                                                      \\
-22                      & Watchers ID                 &                                                                                                                      \\
-23                      & Created                     &                                                                                                                      \\
-24                      & Updated                     &                                                                                                                      \\
-25                      & Last Viewed                 &                                                                                                                      \\
-26                      & Resolved                    &                                                                                                                      \\
-27                      & Due date                    &                                                                                                                      \\
-28                      & Actual end                  &                                                                                                                      \\
-29                      & Actual start                &                                                                                                                      \\
-30                      & Original estimate           &                                                                                                                      \\
-31                      & Remaining estimate          &                                                                                                                      \\
-32                      & Time Spent                  &                                                                                                                      \\
-33                      & Work Ratio                  &                                                                                                                      \\
-34                      & Sprint\#                    & \begin{tabular}[c]{@{}l@{}}A number of fields equal to \\ the number of sprints it has \\ been part of.\end{tabular} \\ \hline
-\end{tabular}
+\begin{table}[h!]
+\caption{Description of fields in Jira issues work items.}
+\centering
+ \begin{tabular}{l l} 
+ \hline
+ \textbf{Issue field} & \textbf{Description} \\ [0.5ex] 
+ \hline\hline
+  & \multicolumn{1}{c}{\textbf{Content}} \\
+ summary & A brief summary of the issue. \\ 
+ description & A longer, detailed description of the issue. \\
+ comments & Community discussion on each issue. \\
+  & \multicolumn{1}{c}{\textbf{Context and Links}} \\
+ issuetype & The issue purpose within the organisation. \\
+ project & The parent project issue belongs to. \\
+ components & Project component(s) to which issue relates. \\
+ labels & Label(s) to which this issue relates. \\
+ issuelinks & A list of links to related issues. \\
+ subtasks & Sub-issues to this issue (one level deep). \\
+  & \multicolumn{1}{c}{\textbf{Workflow}} \\
+ fixVersions & Project version in which the issue is fixed. \\
+ status & The stage the issue is at. \\
+ priority & The issue importance in relation to others. \\
+ resolution & A record of the issue’s resolution/closure.  \\
+ timeestimate & Estimated amount of time required to resolve. \\
+ timespent & Amount of time spent working on this issue. \\
+  & \multicolumn{1}{c}{\textbf{People and Community}} \\
+ creator & The person who created the issue. \\
+ reporter & The person who found/reported the issue. \\
+ assignee & The person responsible to resolve the issue. \\
+ votes & Number of people who want this issue addressed. \\
+ watches & Number of people receiving updates \\
+  & \multicolumn{1}{c}{\textbf{Timestamps}} \\
+ created & Time and date this issue was entered into Jira. \\
+ updated & Time and date this issue was last edited. \\
+ resolutiondate & Time and date this issue was resolved. \\
+ duedate & Time and date this issue is scheduled to be \\
+ & completed. \\ [2ex] 
+ \hline
+ \end{tabular}
 \end{table}
 
 \section{Related work} 
