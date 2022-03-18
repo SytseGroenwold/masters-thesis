@@ -20,42 +20,117 @@
   \providecommand\BibTeX{{%
     \normalfont B\kern-0.5em{\scshape i\kern-0.25em b}\kern-0.8em\TeX}}}
 
-%% Rights management information.  This information is sent to you
-%% when you complete the rights form.  These commands have SAMPLE
-%% values in them; it is your responsibility as an author to replace
-%% the commands and values with those provided to you when you
-%% complete the rights form.
-% \setcopyright{acmcopyright}
-% \copyrightyear{2022}
-% \acmYear{2022}
-% \acmDOI{XXXXXXX.XXXXXXX}
-
-%% These commands are for a PROCEEDINGS abstract or paper.
-% \acmConference[Conference acronym 'XX]{Make sure to enter the correct
-%   conference title from your rights confirmation emai}{June 03--05,
-%   2018}{Woodstock, NY}
-%
-%  Uncomment \acmBooktitle if th title of the proceedings is different
-%  from ``Proceedings of ...''!
-%
-%\acmBooktitle{Woodstock '18: ACM Symposium on Neural Gaze Detection,
-%  June 03--05, 2018, Woodstock, NY} 
-% \acmPrice{15.00}
-% \acmISBN{978-1-4503-XXXX-X/18/06}
-
-%% Submission ID.
-%% Use this when submitting an article to a sponsored event. You'll
-%% receive a unique submission ID from the organizers
-%% of the event, and this ID should be used as the parameter to this command.
-%%\acmSubmissionID{123-A56-BU3}
-%% The majority of ACM publications use numbered citations and
-%% references.  The command \citestyle{authoryear} switches to the
-%% "author year" style.
-
 %% Add images folder as source for graphics
 \graphicspath{ {images/} }
 
-%% end of the preamble, start of the body of the document source.
+%% Library to draw ERD diagrams
+\usepackage{array}
+\renewcommand{\arraystretch}{1.1}
+\usepackage{tikz}
+\usetikzlibrary{shapes.multipart}
+\usetikzlibrary{positioning}
+\usetikzlibrary{shadows}
+\usetikzlibrary{calc}
+
+\usepackage{pdflscape}
+
+% code for "one to omany", etc. is taken from https://tex.stackexchange.com/q/141797/101651
+\makeatletter
+\pgfarrowsdeclare{crow's foot}{crow's foot}
+{
+    \pgfarrowsleftextend{+-.5\pgflinewidth}%
+    \pgfarrowsrightextend{+.5\pgflinewidth}%
+}
+{
+    \pgfutil@tempdima=0.6pt%
+    \pgfsetdash{}{+0pt}%
+    \pgfsetmiterjoin%
+    \pgfpathmoveto{\pgfqpoint{0pt}{-9\pgfutil@tempdima}}%
+    \pgfpathlineto{\pgfqpoint{-13\pgfutil@tempdima}{0pt}}%
+    \pgfpathlineto{\pgfqpoint{0pt}{9\pgfutil@tempdima}}%
+    \pgfpathmoveto{\pgfqpoint{0\pgfutil@tempdima}{0\pgfutil@tempdima}}%
+    \pgfpathmoveto{\pgfqpoint{-8pt}{-6pt}}% 
+    \pgfpathlineto{\pgfqpoint{-8pt}{-6pt}}%  
+    \pgfpathlineto{\pgfqpoint{-8pt}{6pt}}% 
+    \pgfusepathqstroke%
+}
+
+\pgfarrowsdeclare{omany}{omany}
+{
+    \pgfarrowsleftextend{+-.5\pgflinewidth}%
+    \pgfarrowsrightextend{+.5\pgflinewidth}%
+}
+{
+    \pgfutil@tempdima=0.6pt%
+    \pgfsetdash{}{+0pt}%
+    \pgfsetmiterjoin%
+    \pgfpathmoveto{\pgfqpoint{0pt}{-9\pgfutil@tempdima}}%
+    \pgfpathlineto{\pgfqpoint{-13\pgfutil@tempdima}{0pt}}%
+    \pgfpathlineto{\pgfqpoint{0pt}{9\pgfutil@tempdima}}%
+    \pgfpathmoveto{\pgfqpoint{0\pgfutil@tempdima}{0\pgfutil@tempdima}}%  
+    \pgfpathmoveto{\pgfqpoint{0\pgfutil@tempdima}{0\pgfutil@tempdima}}%
+    \pgfpathmoveto{\pgfqpoint{-6pt}{-6pt}}% 
+    \pgfpathcircle{\pgfpoint{-11.5pt}{0}} {3.5pt}
+    \pgfusepathqstroke%
+}
+
+\pgfarrowsdeclare{one}{one}
+{
+    \pgfarrowsleftextend{+-.5\pgflinewidth}%
+    \pgfarrowsrightextend{+.5\pgflinewidth}%
+}
+{
+    \pgfutil@tempdima=0.6pt%
+    \pgfsetdash{}{+0pt}%
+    \pgfsetmiterjoin%
+    \pgfpathmoveto{\pgfqpoint{0\pgfutil@tempdima}{0\pgfutil@tempdima}}%
+    \pgfpathmoveto{\pgfqpoint{-6pt}{-6pt}}% 
+    \pgfpathlineto{\pgfqpoint{-6pt}{-6pt}}%  
+    \pgfpathlineto{\pgfqpoint{-6pt}{6pt}}% 
+    \pgfpathmoveto{\pgfqpoint{0\pgfutil@tempdima}{0\pgfutil@tempdima}}%
+    \pgfpathmoveto{\pgfqpoint{-8pt}{-6pt}}% 
+    \pgfpathlineto{\pgfqpoint{-8pt}{-6pt}}%  
+    \pgfpathlineto{\pgfqpoint{-8pt}{6pt}}%    
+    \pgfusepathqstroke%
+}
+\makeatother
+
+\tikzset{%
+    pics/entity/.style n args={3}{code={%
+        \node[draw,
+        rectangle split,
+        rectangle split parts=2,
+        text height=1.5ex,
+        ] (#1)
+        {#2 \nodepart{second}
+            \begin{tabular}{>{\raggedright\arraybackslash}p{8.5em}}
+                #3
+            \end{tabular}
+        };%
+    }},
+    pics/entitynoatt/.style n args={2}{code={%
+        \node[draw,
+        text height=1.5ex,
+        ] (#1)
+        {#2};%
+    }},
+    zig zag to/.style={
+        to path={(\tikztostart) -| ($(\tikztostart)!#1!(\tikztotarget)$) |- (\tikztotarget)}
+    },
+    zig zag to/.default=0.5,   
+    one to one/.style={
+        one-one, zig zag to
+    },
+    one to oone/.style={            % I do not how to make "one to Optional-one" rel
+        one-one, zig zag to
+    },
+    one to many/.style={
+        one-crow's foot, zig zag to,
+    },
+    one to omany/.style={
+        one-omany, zig zag to
+    }
+}
 
 %% Begin document
 \begin{document}
@@ -96,17 +171,14 @@
 %% article.
 \begin{abstract}
 
-DISCLAIMER: 
+Abstract comes here in the final stage of writing. \\
 
-Find the most recent version of my design through GitHub: \url{https://github.com/SytseGroenwold/masters-thesis}. I would immensely appreciate it if you can take the lastest version from there when providing feedback; I plan to finalise it by Sunday 27th of February, but I understand if you cannot wait until then. \\
-
-I have only secured this project 3 weeks ago and only last week the supervisor and I settled on the subject. Hence my paper being in such a raw shape. It speaks for itself which sections are more fleshed out and which are mere summations of points I wish to talk about. I would greatly appreciate it if you can take this into account while reviewing it.
 \end{abstract}
 
 %%
 %% Keywords. The author(s) should pick words that accurately describe
 %% the work being presented. Separate the keywords with commas.
-\keywords{Agile, Scrum, Risk, User Stories, Sprint Backlog, Machine Learning}
+\keywords{Keywords come here in the final stage of writing.}
 
 %%
 %% This command processes the author and affiliation and title
@@ -114,47 +186,58 @@ I have only secured this project 3 weeks ago and only last week the supervisor a
 \maketitle
 
 \section{Introduction}
-Stuff to incorporate
-
-iteration: in Scrum, an iteration is a short amount of time (usually 2-4 weeks) in which a team works on a predetermined amount of user stories to create an increment.
-
-increment: an increment is a working milestone or release of a software product.
-
-time-boxed: fixed duration
-
 In software development, there are several risk events that can decrease product quality, delay delivery or even cause the project to fail[2]. 
 Tangible examples of these events are budget overruns and losing personnel, while more subtle ones include a lack of clearly defining work to be done or team members being unaligned. 
 (Early) detection (i.e. risk assessment) of such risks and controlling them effectively (i.e. risk control) is crucial for the success of a project[3].
 
 The Agile development methodologies have demonstrated their advantages over traditional methods in reducing time to market, overall product quality and a closer alignment to business needs[5]. 
-In Scrum, this is achieved through an iterative process over a short period of time, called sprints. The product manager creates a backlog of user stories, which are the business requirements translated to work for the development team. 
+In Scrum, this is achieved through an iterative process over a short period of time; these iterations are called sprints.
+The product manager creates a backlog of user stories, which are the business requirements translated into pieces work for the development team. 
 During a sprint, the team works on a selected number of these user stories and afterwards they reflect on both the work done and the collaboration within the team.
-Despite these improvements, Agile methodologies can still suffer from risks such as unclear user stories, inefficient decomposition, and scheduling of the sprint backlogs. 
+Despite these improved practices, Agile methodologies can still suffer from risks: unclear user stories, inefficient decomposition, and scheduling of the sprint backlogs. 
 Determining those risk through analysis of the user stories in the product backlog is mostly done by human experts. 
+
 In a previous study, we sought to automate this process, by creating an machine learning model based on previous works and ensembling those models. 
 
 While those results show promise for a machine learning model to detect risks, improvement is needed to make the predictions more robust, especially to achieve more consistent scores between different datasets.
 We determined that incorporating the sprint plannings, instead of only analysing the individual user stories, could be a valuable addition to the model parameters in achieving this goal. In this study we plan to do that, and additionally investigate a way to single-out the specific risks that are inside a sprint backlog, so that teams can exercise risk control before they affect the team output.
 
+Among the different software packages used by Scrum adaptors to track user stories, Jira is by far the most used one, having a large margin over other comparable services, according to slintel\footnote{https://www.slintel.com/tech/bug-and-issue-tracking/atlassian-jira-market-share}, Datalyze\footnote{https://www.datanyze.com/market-share/project-management--217/jira-market-share}, and Enlyft\footnote{https://enlyft.com/tech/products/atlassian-jira}. It is however still under represented in software engineering research, according to Montgomery et al.\cite{montgomery2022jira}; for this reason they published their dataset with the most extensive collection of publicly available Jira repositories to date.
+
 \subsection{Research question}
-To what extend can inclusion of sprint backlog analysis improve risk assessment within software teams using Scrum and how can this risk assessment lead lead to and improvement of risk control?
+\textbf{Q1}. To what extend can the inclusion of sprint backlog in issue analysis improve risk assessment within software teams using Scrum and \textbf{Q2}. which features of such a model are most impactful for both risk assessment and risk control?
 
 \subsection{Sub questions}
-These are the sub questions
+The sub questions are:
+
+\textbf{Q1.1}: How many publicly available Jira repositories have their sprint data available?
+
+\textbf{Q1.2}: Is it possible to include this data as a single feature into existing models, or would a separate model added to the ensembling method perform better?
+
+\textbf{Q2.1}: Is the sprint data a more direct indicator for risk assessment than the issue fields?  
+
+\textbf{Q2.2}: Will adding/removing certain issue from a sprint work lead to a lesser amount of overridden sprints?
+
 
 \section{Exploratory Data Analysis}
-Among the different software packages used by Scrum adaptors to track user stories, Jira is by far the most used one, having a large margin over other popular services such as Service-Now, Trello and Azure DevOps.
-For this study, due to widescale availability, only data sets extracted from Jira will initially be used. If it turns out that this is insufficient, other data sets can be explored.
+Data sets extracted from the Jira issue tracking software (IST) will be used in this study, because of its high adaption rate, wide-scale public availability, and high number of data fields on each issue.
+The data sets that have been considered for this study are publicly available data sets which mostly come from GitHub accounts of other researchers whom have gathered them for previous studies.
+The dataset used in this study is the one created by Montgomery et al.\cite{montgomery2022jira}, because it is has the most projects, is the most recent and has enhanced data.
+In case this dataset appears to be insufficient, there will be an option to gather a data set from an organisation. This dataset will also be considered for a validation set.
 
-The requirements for the data sets are straight-forward: they are collections of user stories that are gathered in both product backlogs and sprint backlogs. Additionally, each user story needs to contain the description the story, the date it was created, the date it is completed, and in which sprints backlogs it has been included.
-The sprint backlogs are not even required to be individually gathered: if each user story has a record of the sprints it was part of, it should be sufficient information for the model.
+\begin{figure}[h]
+  \caption{Jira MongoDB database scheme}
+  \centering
+  \includegraphics[width=\linewidth]{overleaf/images/ERD-jira.png}
+  \caption{ERD}
+\end{figure}
 
-The data sets that will be considered for this study are publicly available data sets, which mostly come from github accounts of other researchers whom have gathered them for previous studies. 
-When these data sets prove to not be sufficient, there will be two options to gather a data set from organistations (Utrecht University's internal software development department or ING Bank's data sat of user stories stored in Service Now).
-There are previous studies who have already worked with these data sets, but as they are not publicly available and are constantly growing, they will only at at later moment be gathered if there is a necessity for them.
-Lastly, this project's supervisor is currently giving a course on DevOps and Cloud-based Software, in which different teams of students will need to work together using a user story backlog. At the end of this course (March), the students are to hand in an overview of their product/sprint backlogs as well and these can be considered for this study.
-
-The model for the data sets gathered from Jira have the following features. In a later stage of the project, features which are not used can be left out.
+Figure 1 describes the entity relationship diagram (ERD) for the data set as it modelled inside the document data store MongoDB.
+Due to nested values in document-oriented data stores, the ERD is a simplified depiction of the real data structure, which can include various values for the historical changes of the issues, as well as the different levels of links between issues. 
+The primary documents are issues.
+The two main documents nested inside each issue, are "fields" and "changelog".
+The fields are are the current values of the attributes inside an issue, as described in Table 2.
+The changelog are historical values of these fields, as well as some meta data, i.e. number of times changed and a date and time of the change.
 
 \begin{table}[h!]
 \caption{Description of fields in Jira issues work items.}
@@ -163,31 +246,28 @@ The model for the data sets gathered from Jira have the following features. In a
  \hline
  \textbf{Issue field} & \textbf{Description} \\ [0.5ex] 
  \hline\hline
-  & \multicolumn{1}{c}{\textbf{Content}} \\
+  & \multicolumn{1}{c}{\textbf{Issues}} \\
  summary & A brief summary of the issue. \\ 
  description & A longer, detailed description of the issue. \\
  comments & Community discussion on each issue. \\
-  & \multicolumn{1}{c}{\textbf{Context and Links}} \\
  issuetype & The issue purpose within the organisation. \\
  project & The parent project issue belongs to. \\
  components & Project component(s) to which issue relates. \\
  labels & Label(s) to which this issue relates. \\
  issuelinks & A list of links to related issues. \\
  subtasks & Sub-issues to this issue (one level deep). \\
-  & \multicolumn{1}{c}{\textbf{Workflow}} \\
  fixVersions & Project version in which the issue is fixed. \\
  status & The stage the issue is at. \\
  priority & The issue importance in relation to others. \\
  resolution & A record of the issue’s resolution/closure.  \\
  timeestimate & Estimated amount of time required to resolve. \\
  timespent & Amount of time spent working on this issue. \\
-  & \multicolumn{1}{c}{\textbf{People and Community}} \\
  creator & The person who created the issue. \\
  reporter & The person who found/reported the issue. \\
  assignee & The person responsible to resolve the issue. \\
- votes & Number of people who want this issue addressed. \\
+ votes & Number of people who want 
+ this issue addressed. \\
  watches & Number of people receiving updates \\
-  & \multicolumn{1}{c}{\textbf{Timestamps}} \\
  created & Time and date this issue was entered into Jira. \\
  updated & Time and date this issue was last edited. \\
  resolutiondate & Time and date this issue was resolved. \\
@@ -197,11 +277,85 @@ The model for the data sets gathered from Jira have the following features. In a
  \end{tabular}
 \end{table}
 
+The dataset is very extensive and complete and holds several types of data: text, datetimes, nominal and ordinal numerical data, linked network data and historical versions of all nearly every field.
+The fields are a mix of singular values, lists and dictionaries.
+
+The most important fields of the data set arguably is the enhanced mapped data of links and types.
+Not only does this normalise parts of the data and reduce processing requirements, but it also adds the possibility of using these custom fields. Choetkiertikul et al. \cite{choetkiertikul2017predicting}
+have showed the value of this type of data, therefore this study continues in that same direction.
+
+\begin{table}[h!]
+\caption{Dataset of Jira repositories}
+\centering
+ \begin{tabular}{l l l l l l} 
+ \hline
+   & Sum & Max & Min & Median & Std Dev \\ [0.5ex] 
+ \hline\hline
+ Born & - & 2016 & 2000 & TBD & TBD \\
+ Issues & 2,686,282 & 1,014,926 & 1867 & 59,853 & 251,973 \\
+ DIT & 485 & 122 & 1 & 18 & 31 \\
+ UIT & 352 & 55 & 2 & 14 & 16 \\
+ Links & 978,223 & 264,108 & 46 & 15,898 & 81,744 \\
+ DLT & 180 & 23 & 6* & 10 & 6 \\
+ ULT & 169 & 20 & 4 & 10 & 5 \\ 
+ Ch/I & - & 30 & 3 & 12 & 6 \\
+ Co/I & - & 8 & 1* & 3 & 2 \\
+ UP & 1822 & 657 & 3 & 37 & 178 \\ [2ex] 
+ \hline
+ \end{tabular}
+ \subcaption{* The two no longer available repositories do not have these values \\
+ \textbf{Column names}: Documented Issue Types (DIT); Used Issue Types (UIT);
+Documented Link Types (DLT); Used Link Types (ULT);
+Changes per Issue (Ch/I); Comments per Issue (Co/I); Unique Projects (UP)
+}
+\end{table}
+
+The data set consist of 16 public Jira repositories with a total of 1822 different project, containing 2.7 million issues. 
+These issues contain historical data of 32 million changes, 9 million comments and 1 million issue links of various natures. 
+Table 1 shows the complete overview of this data: the year the projects started, the number of issues, number of documented and used issue types, number of documented and used link types, number of changes per issue, number of comments per issue, and number of unique projects. 
+
+Jira being a customizable IST explains why there are more DITs and DLTs than UIT and ULT. It is possible that some are created and are not yet or no longer used.
+Custom fields are not directly usable in a possible model, due to them not being normalised.
+The authors of the data set therefore enhanced the data set by mapping the links and the types to a curated number of options.
+This enhancement allows for use of these custom fields, better comparison between different Jira repositories, and projects within those repositories.
+
+The minimum number of changes on any of the nearly 2.7 million issues is 3 and the median is 12. If these are considered by the model, it would mean that the data set holds close to a magnitude more data than any of the previous researches, where nobody used this historical data.
+
+The sprint iterations documents and boards documents retrieved from Jira hold less fields and can be seen in figure 3.
+The boards are merely described in this diagram, due to each sprint needing to be contained within a board and the sprints themselves are sourced through iterating over each existing board.
+The sprints do hold not hold many fields eligible to be used for analysis: the different dates allow to calculate the duration of the sprint and a difference between endDate and completeDate indicate an overrun or the administrative action of closing the sprint being done later.
+
+\begin{figure}
+\caption{ERD of the boards and sprints Jira documents}
+\begin{center}
+    \begin{tikzpicture}
+         \pic {entity={A}{Board}{%
+            id INT \\
+            name STR \\
+            type STR
+        }};
+        \pic[right=7em of A] {entity={AB}{Sprint}{%
+            id INT\\
+            state STR \\
+            name STR \\
+            originBoardId INT \\
+            issues LIST<INT> \\
+            startDate \\
+            endDate \\
+            completeDate \\
+            activatedDate
+        }};
+        \draw[one to omany] (A.east) -- node[above]{\footnotesize is in} (AB.west);
+        % {\captionof{figure}{caption 2 caption }}
+    \end{tikzpicture}
+\end{center}
+\end{figure}
+
+
 \section{Related work} 
-Some introductory piece of text to ensure that the next paragraphs nicely indent the same amount of space. \\
 
 \subsection{Agile software development} \\
-Software development is known to face issues with delivering expected quality and overrun schedules and costs.\cite{dingsoyr2021managing}. 
+Software development is known to face issues with delivering expected quality and overrun schedules and costs.\cite{dingsoyr2021managing}
 Agile methodologies attempt to combat these issues through shorter delivery windows by iterative development, focusing on interaction and communication between all people involved (team members, business, stakeholders and end-users), and reducing the size of the intermediate results. 
 This leads to teams being more capable to react to changing requirements and prevent waste of time and resources.\cite{cohen2004introduction}
 
@@ -210,7 +364,7 @@ Following this methodology, teams work on \emph{user stories}, which are the sys
 These user stories are created by the \emph{product owner} and based on the requirements as defined by the business, stakeholders, and the end-users. 
 Together with the team, the product owner can \emph{refine} the stories and assign it \emph{story points}, which are arbitrary numbers that signal the amount of effort (not time) it takes to complete. 
 The user stories are prioritized and stored in the \emph{product backlog} until selected. 
-The team works in cycles of work called \emph{sprints} and are usually 2-4 weeks long. 
+The team works in \emph{iterations} of work called \emph{sprints}, which are \emph{timeboxed} to usually 2-4 weeks long.
 At the beginning of a sprint, the teams selects user stories from the product backlog to work on, which they intend to finish within that sprint. 
 User stories can therefor never take longer than the duration of sprint; if they do, they need to be split up into smaller ones. 
 User stories inside the sprint backlog do not change during the cycle. Every day there is a \emph{standup}, where each team member shares their progress on the user stories and adjust if necessary to complete the work. 
@@ -219,20 +373,36 @@ If some work is not done, it automatically rolls over to the next sprint, althou
 
 Despite these benefits, a study in 2014 showed that many adaptors of the Scrum methodology (in Norway) still address theirs risks in their old, traditional approaches.\cite{siddique2014practical} Additionally, even if some problems are solved through adaptation of Scrum, new risks can possibly be introduced, such as risks in the sprint planning, risks in the code base and technologies used, an increased separation between the development and the operational work, and increased impact of technical debt\cite{kruchten2012technical}\cite{walczak2013risks}. \\
 
-\subsection{Risks assessment from sprint backlogs} \\
-In our previous study, we defined what we understand ask risk: ...
-We also established that previous work on the subject has done, but mostly on the individual aspects that together make up the broader issue of risk. We investigated and implemented an ensembling machine learning (ML) method that can assess a certain amount of risk inside an individual user story. One outcome of that study is increasing the so called attributes of our model. So far, the \emph{created}, \emph{updated} and \emph{resolutiondate} fields of the Jira story schema are not used or of low significance of the model. The same goes for the use of individual sprint backlogs, instead of only individual user stories.
+\subsection{Risks assessment and control} \\
+Meerman\cite{meerman2022risk} looked at individual issues and used some of the default features of a Jira isssue: summary, description, status, type, labels, project, assignee, created, updated, resolution date, points, urgency, severity and sprint.
+They made use of ensembling different models to increase performance: adaboost, bagging, random forest, gradient boost and stacking model.
+The outcome was a prediction of the status: cancelled, completed or active.
 
-End\\
+For data processing, they transformed the textual data by removing capitals and stop-words and by stemming the words. 
+These steps reduce the required processing power, something valuable for the larger data set used in this study.
+The downside of removing stop-words, is that sequence modelling of the text is no longer possible.
+The textual data was then processed to be used as input for the model through NLP techniques. Bag of words was considered, but deemed too impractical for large data sets, which is also our case.
+The pre-trained text model BART was used in addition to Latent Dirichlet Allocation (LDA), which automates topic modelling and can use its output of a number of topics as input for the model.
 
-\subsection{Risk control} \\
-Most studies done in the past   \\
+Choetkiertikul et al.\cite{choetkiertikul2017predicting} looked at both individual issues and related issues through links, and then used collective inference to make predictions for related issues simultaniously. 
+The individual issues done through the following features: discussion time, waiting time, tyep, task repetition, priority, changing of priority, no of fix versions, no of affect versions, changing of description, reporter reputation, developer's workload, percentage of delayed tasks, number of votes and number of watchers.
+The related issues are done in both an explicit and implicit manner. Explicitly, every issue is linked to others and thus a relation is established. Implicitly, the authors created a model that creates its own links based on the individual issues' features.
 
+\subsection{Machine learning models}
+Todo before the next deadline on methodology
 
 \section{Methodology}
 
 \subsection{Machine learning models for risk assessment}\\
-Bla bla
+Based on the EDA and related work, this study will use the following methods and achieve the following goals:
+
+* pre-process the textual data in the same manner as Meerman 
+
+* use ensembling as well, due to the variance and size of the input data
+
+* make use of the NLP methods as done by Meerman, to reduce required processing power.
+
+* our model will make a prediction on status (at the end of a sprint), number of changes of the field sprint, duedate, resolutiondate.
 
 \subsection{Methods to share risk control}\\
 Besides having a model that can assess the risk, it also needs to share which specific elements are causing the risk. These need to be reported to the team.
@@ -268,7 +438,8 @@ There is always the risk of the ML model accuracy not being significant. If this
   \caption{Gantt chart on planning per calendar week.}
 \end{figure}
 
-
+\section{Future work}
+Look at project level instead of jira-repo level.
 
 %%
 %% The acknowledgments section is defined using the "acks" environment
